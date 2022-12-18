@@ -1,4 +1,4 @@
-#connection to twitter API
+#connection to twitter API and get authentication
 install.packages("twitteR")
 library("twitteR")
 
