@@ -8,13 +8,18 @@ M5S_separated_tweets <- as.character(allM5Stweets$full_text)
 PD_separated_tweets <- as.character(allPDtweets$full_text)
 
 
-#now I'll look for tweets that talkabout "giovani" 
-giovani = "giovani | gen Z| ragazz | nuove gen "
-
+#now I'll look for tweets that talk about "giovani" 
+giovani= c("giovani | gen Z| ragazzi | nuove generazioni ")
 library(stringr)
-FDI_giovani <- str_subset(FDI_separeted_tweeets, pattern = "giovani| gen Z| ragazz | nuove gen")
-FI_giovani <- str_extract_all( FI_separated_tweets, pattern = "giovani | gen Z| ragazz | nuove gen")
-Lega_giovani <-  str_subset( Lega_separated_tweets, pattern = "giovani| gen Z| ragazz | nuove gen")
-M5S_giovani <- str_subset( M5S_separated_tweets , pattern = "giovani| gen Z| ragazz | nuove gen")
-PD_giovani <- str_subset(  PD_separated_tweets , pattern = "giovani| gen Z| ragazz | nuove gen")
- 
+FDI_giovani <- str_subset(FDI_separeted_tweeets, pattern = "giovani | gen Z| ragazzi | nuove generazioni ")
+FI_giovani <- str_subset( FI_separated_tweets, pattern = "giovani | gen Z| ragazzi | nuove generazioni ")
+Lega_giovani <-  str_subset( Lega_separated_tweets, pattern = "giovani| gen Z| ragazzi | nuove generazioni")
+M5S_giovani <- str_subset( M5S_separated_tweets , pattern = "giovani| gen Z| ragazzi | nuove generazioni ")
+PD_giovani <- str_subset(  PD_separated_tweets , pattern = "giovani| gen Z| ragazzi | nuove generazioni")
+
+
+#I have a question. Why if I run just a character it gives me back a different number of total tweets than the combined vectr?
+giovani_2 = "giovani"
+FDI_giovani2 <- str_subset(FDI_separeted_tweeets, pattern = "giovani")
+
+
