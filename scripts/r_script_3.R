@@ -12,7 +12,7 @@ PD_separated_tweets <- as.character(allPDtweets$full_text)
 giovani = "giovani | gen Z| ragazz | nuove gen "
 
 library(stringr)
-FDI_giovani1 <- str_subset(FDI_separeted_tweeets, pattern = "giovani| gen Z| ragazz | nuove gen")
+FDI_giovani <- str_subset(FDI_separeted_tweeets, pattern = "giovani| gen Z| ragazz | nuove gen")
 FI_giovani <- str_extract_all( FI_separated_tweets, pattern = "giovani | gen Z| ragazz | nuove gen")
 Lega_giovani <-  str_subset( Lega_separated_tweets, pattern = "giovani| gen Z| ragazz | nuove gen")
 M5S_giovani <- str_subset( M5S_separated_tweets , pattern = "giovani| gen Z| ragazz | nuove gen")
