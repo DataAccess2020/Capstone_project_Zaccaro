@@ -8,7 +8,7 @@ allFDItweets <-rtweet::get_timeline(retryonratelimit = T,
                      verbose = T, 
                      parse = T,
 )
-Sys.sleep(0.5)
+
 
 allLegatweets <- rtweet::get_timeline(retryonratelimit = T,
                                       user = 13514762, 
