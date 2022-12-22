@@ -1,0 +1,175 @@
+---
+title: "Importance of young people for some political parties in Italy"
+author: " Gianluca Zaccaro"
+date: "22/12/2022"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+## Introduction 
+
+The aim of this project is to understand the importance that some
+political parties in Italy have about young by analizying the tweets they
+do about this topic.
+
+## Research Question 
+
+The purpose of the project is to compare the total number of tweets for
+each political party in order to comprehend to which this topic is more
+important. The sample of the political parties is decided according the
+majority of seats they have in Parliament and based on a division
+between : left-wing, center and right-wing.
+
+## Method
+
+\- connection to twitter API
+
+\- download the tweets
+
+\- scrape the tweets
+
+\- plot them into a graph
+
+### Twitter authorization
+First thing to do is to get authorization by Twitter API to download the tweets
+```{r, message = F, warning = F, eval=FALSE}
+install.packages("rtweet")
+library(rtweet)
+
+token <- create_token(
+  app = "Giandatascience",
+  consumer_key = "xx",
+  consumer_secret = "xx",
+  access_token = "xx",
+  access_secret = "xx",
+)
+
+aut1 <- rtweet_app()
+auth_save(aut1, "GianZac")
+
+auth_as("GianZac")
+```
+
+### Tweets download
+Then I have to download the tweets and store them into my pc in order to manipulate them without connecting to the server anymore.
+```{r, message = F, warning = F, eval=FALSE}
+allFDItweets <-rtweet::get_timeline(retryonratelimit = T,
+                     user = 1024976264, 
+                     n=1000,
+                     since_id = NULL,
+                     max_id = NULL,
+                     verbose = T, 
+                     parse = T,
+)
+
+
+allLegatweets <- rtweet::get_timeline(retryonratelimit = T,
+                                      user = 13514762, 
+                                      n=1000,
+                                      since_id = NULL,
+                                      max_id = NULL,
+                                      verbose = T, 
+                                      parse = T,
+)
+
+allFItweets <- rtweet::get_timeline(retryonratelimit = T,
+                                    user = 147543162, 
+                                    n=1000,
+                                    since_id = NULL,
+                                    max_id = NULL,
+                                    verbose = T, 
+                                    parse = T,
+)
+
+allPDtweets <- rtweet::get_timeline(retryonratelimit = T,
+                                    user = 13294452, 
+                                    n=1000,
+                                    since_id = NULL,
+                                    max_id = NULL,
+                                    verbose = T, 
+                                    parse = T,
+)
+
+
+allM5Stweets <- rtweet::get_timeline(retryonratelimit = T,
+                                     user =  289400495, 
+                                     n=1000,
+                                     since_id = NULL,
+                                     max_id = NULL,
+                                     verbose = T, 
+                                     parse = T,
+)
+```
+
+Now I have a sample of a thousand tweets from some right-wing parties like Fratelli d' Italia, Lega, Forza Italia, a left-wing party which is Partito Democratico and a central one which is Movimento Cinque Stelle.
+
+### Scraping
+First, since the getimeline function gives me a data frame, I select only the column containing the tweets and I read them as a character vector.
+I use regular expressions to find in these tweets words regarding to young people like "giovani","generazione Z", "nuove generazioni", "ragazzi".
+
+```{r, message = F, warning = F, eval=FALSE}
+FDI_separeted_tweeets <- as.character(allFDItweets$full_text)
+FI_separated_tweets <- as.character(allFItweets$full_text)
+Lega_separated_tweets <- as.character(allLegatweets$full_text)
+M5S_separated_tweets <- as.character(allM5Stweets$full_text)
+PD_separated_tweets <- as.character(allPDtweets$full_text)
+
+
+
+giovani= c("giovani | gen Z| ragazzi | nuove generazioni ")
+library(stringr)
+FDI_giovani <- str_subset(FDI_separeted_tweeets, pattern = "giovani | gen Z| ragazzi | nuove generazioni ")
+FI_giovani <- str_subset( FI_separated_tweets, pattern = "giovani | gen Z| ragazzi | nuove generazioni ")
+Lega_giovani <-  str_subset( Lega_separated_tweets, pattern = "giovani| gen Z| ragazzi | nuove generazioni")
+M5S_giovani <- str_subset( M5S_separated_tweets , pattern = "giovani| gen Z| ragazzi | nuove generazioni ")
+PD_giovani <- str_subset(  PD_separated_tweets , pattern = "giovani| gen Z| ragazzi | nuove generazioni")
+
+```
+Finally, I know the number of tweets about young people for each political party
+
+### Graph
+I create a data frame with the names of the parties and the absolute frequencies of the tweets.
+I do the graph and save it.
+```{r, message = F, warning = F, eval=FALSE}
+ FDI = " FDI"
+FI = "FI"
+Lega = "Lega"
+M5S = "M5S"
+PD = "PD"
+
+
+FDI_freq <- as.factor(FDI_giovani)
+FI_freq <- as.factor(FI_giovani)
+Lega_freq <- as.factor(Lega_giovani)
+M5S_freq <- as.factor( M5S_giovani)
+PD_freq <- as.factor( PD_giovani)
+
+#creates the data frame
+df<-data.frame( POLITICAL_PARTIES=c("FDI","FI","Lega","M5S", "PD"), Freq=c( 5, 14 , 6 , 30 , 45 ))
+df
+POLITICAL_PARTIES  <- c("FDI","FI","Lega","M5S", "PD")
+Number_of_tweets <-c( 5, 14 , 6 , 30 , 45 )
+
+#do the graph
+library(tidyverse)
+install.packages("ggplot2")
+library(ggplot2)
+
+
+graph <-ggplot(df, aes( POLITICAL_PARTIES,  Number_of_tweets)) +
+  geom_bar(stat="identity", fill=hcl(195,100,65)) +
+  geom_text(aes(label= POLITICAL_PARTIES, y= Number_of_tweets*0.5), colour="white", size=5) +
+  ggtitle( " TWEETS ABOUT YOUNGS") +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) 
+  
+ggsave(graph, filename= "importance of young people for each political party.jpeg")
+```
+
+
+## Results
+As seen by the level function and the graph, PD, which is a left-wing party, tweets are way more then the ones of FDI, which is a right-wing party.
+I expect that the tweets content and the political glance about young is different between left and right wings, but it's also interesting to observe that for left wing parties it probably is a more relevant topic. 
+This work can be for sure implemented with several topics, political parties and politicians in order to visualize what themes are relevant for each political party (and so, for example, decide which one to vote according to the themes that the voter cares more).
