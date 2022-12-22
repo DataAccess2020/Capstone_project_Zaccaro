@@ -17,15 +17,19 @@ PD_freq <- as.factor( PD_giovani)
 df<-data.frame( POLITICAL_PARTIES=c("FDI","FI","Lega","M5S", "PD"), Freq=c( 5, 14 , 6 , 30 , 45 ))
 df
 POLITICAL_PARTIES  <- c("FDI","FI","Lega","M5S", "PD")
-Abs_Freq <-c( 5, 14 , 6 , 30 , 45 )
+Number_of_tweets <-c( 5, 14 , 6 , 30 , 45 )
 
 #do the graph
 library(tidyverse)
-library(dplyr)
+install.packages("ggplot2")
+library(ggplot2)
 
 
-ggplot(df, aes( POLITICAL_PARTIES,  Abs_Freq)) +
+graph <-ggplot(df, aes( POLITICAL_PARTIES,  Number_of_tweets)) +
   geom_bar(stat="identity", fill=hcl(195,100,65)) +
-  geom_text(aes(label= POLITICAL_PARTIES, y= Abs_Freq*0.5), colour="white", size=10) +
+  geom_text(aes(label= POLITICAL_PARTIES, y= Number_of_tweets*0.5), colour="white", size=5) +
+  ggtitle( " TWEETS ABOUT YOUNGS") +
   theme(axis.text.x=element_blank(),
-        axis.ticks.x=element_blank())
+        axis.ticks.x=element_blank()) 
+  
+ggsave(graph, filename= "importance of young people for each political party.jpeg")
